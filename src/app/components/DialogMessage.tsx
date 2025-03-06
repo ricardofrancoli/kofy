@@ -11,15 +11,17 @@ export const DialogMessage = (props: DialogMessageProps) => {
       <div>
         {props.text}
         {props.type}
-        {props.buttons.map((btn) => {
-          console.log("btn", btn);
+        {props.buttons.map((buttonText, i) => {
           return (
-            <button key={Math.random()} type="button" onClick={() => props.onButtonClick("$0")}>
-              {btn}
+            <button
+              key={buttonText}
+              type="button"
+              onClick={() => props.onButtonClick(props.payloads[i])}
+            >
+              {buttonText}
             </button>
           );
         })}
-        <p>{props.payloads}</p>
       </div>
       );
     </>
