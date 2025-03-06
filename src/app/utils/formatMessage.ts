@@ -33,13 +33,29 @@ export const formatMessage = (message: Message): FormattedMessage => {
   }
 
   if (message.type === "dialog") {
-    return {
+    const commonDialogFields = {
       type: "dialog",
       // @ts-expect-error: buttons should be included in type
       buttons: message.buttons,
       // @ts-expect-error: payloads should be included in type
       payloads: message.payloads,
       ...commonFields,
+    } as const;
+
+    // @ts-expect-error: extra.tags.should be included in type
+    const scaleTags: [string, string] | undefined = message.extra?.buttons?.tags;
+
+    if (!scaleTags) {
+      return {
+        subType: "options",
+        ...commonDialogFields,
+      };
+    }
+
+    return {
+      subType: "scale",
+      scaleTags,
+      ...commonDialogFields,
     };
   }
 

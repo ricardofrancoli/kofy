@@ -5,6 +5,9 @@ export type ButtonsProps = {
   onButtonClick: (payload: string, index: number) => void;
 };
 
+export type OptionsButtonsProps = ButtonsProps;
+export type ScaleButtonsProps = ButtonsProps & { scaleTags: [string, string] };
+
 export type ButtonState = {
   isSelected: boolean;
   isDisabled: boolean;

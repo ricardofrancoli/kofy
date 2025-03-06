@@ -12,7 +12,7 @@ export const DialogMessage = (props: DialogMessageProps) => {
   const [isVisible, setIsVisible] = useState(false);
   const [buttonsVisible, setButtonsVisible] = useState(false);
 
-  const isScale = props.buttons.length === 6;
+  const isScale = props.subType === "scale";
 
   useEffect(() => {
     const messageTimeout = setTimeout(() => {
@@ -53,6 +53,7 @@ export const DialogMessage = (props: DialogMessageProps) => {
             <ScaleButtons
               buttons={props.buttons}
               payloads={props.payloads}
+              scaleTags={props.scaleTags}
               selectedButtonIndex={selectedButtonIndex}
               onButtonClick={handleButtonClick}
             />
