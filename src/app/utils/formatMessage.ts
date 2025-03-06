@@ -7,6 +7,7 @@ const getMessageText = (message: Message): string | undefined => {
 };
 
 export const formatMessage = (message: Message): FormattedMessage => {
+  console.log("message", message);
   // TODO: handle error in case of no text?
   const commonFields = {
     id: message.key,

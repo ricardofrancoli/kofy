@@ -1,8 +1,43 @@
 @import "tailwindcss";
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @theme {
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* Dark mode coffee color palette  */
+  --color-coffee-dark: rgb(30, 22, 18);
+  --color-coffee-medium: rgb(44, 32, 25);
+  --color-coffee-light: rgb(61, 46, 36);
+  --color-cream: rgb(53, 43, 35);
+  --color-cream-light: rgb(34, 27, 21);
+  --color-mocha: rgb(74, 55, 42);
+  --color-caramel: rgb(92, 68, 51);
+
+  /* Text colors for dark mode */
+  --color-text-dark: rgb(154, 154, 154);
+  --color-text-light: rgb(230, 230, 230);
+  --color-text-muted: rgb(110, 110, 110);
+
+  /* Button colors for scale variant */
+  --color-scale-1: rgb(51, 40, 32); /* Darkest option */
+  --color-scale-2: rgb(61, 48, 37);
+  --color-scale-3: rgb(74, 57, 44);
+  --color-scale-4: rgb(86, 66, 51);
+  --color-scale-5: rgb(98, 75, 58); /* Lightest option */
+
+  /* Selected button state colors */
+  --color-selected: rgb(53, 92, 53); /* A greenish tint to indicate selection */
+  --color-selected-dark: rgb(38, 64, 38); /* Darker selection color */
+
+  /* Border color */
+  --color-border: rgb(61, 48, 37);
+
+  /* Shadow colors for dark mode */
+  --shadow-coffee: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -2px rgba(0, 0, 0, 0.5);
 }
 
 :root {
@@ -12,13 +47,32 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: var(--color-coffee-dark);
+    --foreground: var(--color-text-light);
   }
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans, Arial, Helvetica, sans-serif);
+}
+
+/* Custom scrollbar for coffee theme */
+.scrollbar-coffee::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollbar-coffee::-webkit-scrollbar-track {
+  background: var(--color-coffee-dark);
+  border-radius: 5px;
+}
+
+.scrollbar-coffee::-webkit-scrollbar-thumb {
+  background: var(--color-mocha);
+  border-radius: 5px;
+}
+
+.scrollbar-coffee::-webkit-scrollbar-thumb:hover {
+  background: var(--color-caramel);
 }
