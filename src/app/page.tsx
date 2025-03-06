@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef } from "react";
-import { DialogMessage } from "./components/DialogMessage";
+import { DialogMessage } from "./components/DialogMessage/DialogMessage";
 import { TextMessage } from "./components/TextMessage";
 import { useLandbotMessages } from "./hooks/useLandbotMessages";
 import { useStreamedMessages } from "./hooks/useStreamedMessages";
