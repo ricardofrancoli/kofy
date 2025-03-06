@@ -1,15 +1,14 @@
+import type { MessagesRecord } from "@/app/types";
 import type LandbotCore from "@landbot/core";
-import type { Message, SendingMessage } from "@landbot/core/dist/types";
+import type { SendingMessage } from "@landbot/core/dist/types";
 import ky from "ky";
 import { useEffect, useRef, useState } from "react";
 import { isValidMessageType } from "../utils";
 
 const CONFIG_URL = "https://landbot.online/v3/H-2814377-7W1AV8VP9CUPOV1X/index.json";
 
-type MessageKey = string;
-
 export const useLandbotMessages = () => {
-  const [messages, setMessages] = useState<Record<MessageKey, Message>>({});
+  const [messages, setMessages] = useState<MessagesRecord>({});
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string>("");
   const coreRef = useRef<LandbotCore | null>(null);

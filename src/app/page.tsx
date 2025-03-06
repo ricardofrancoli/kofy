@@ -1,10 +1,12 @@
 "use client";
 
-import { formatMessage } from "@/app/utils";
+// import { formatMessage } from "@/app/utils";
 import { useLandbotMessages } from "./hooks/useLandbotMessages";
+import { useStreamedMessages } from "./hooks/useStreamedMessages";
 
 export default function Home() {
   const { error, isLoading, messages, sendMessage } = useLandbotMessages();
+  const { streamedMessages } = useStreamedMessages(messages);
 
   if (error) {
     return <>Error: {error}</>;
@@ -16,10 +18,10 @@ export default function Home() {
 
   return (
     <>
-      {Object.values(messages).map((message) => {
-        console.log("message in component", message);
+      {streamedMessages.map((formattedMessage) => {
+        console.log("formattedMessage in component", formattedMessage);
 
-        const formattedMessage = formatMessage(message);
+        // const formattedMessage = formatMessage(message);
 
         if (!formattedMessage) {
           return <></>;
