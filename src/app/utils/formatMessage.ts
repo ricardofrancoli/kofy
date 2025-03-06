@@ -1,9 +1,19 @@
 import type { FormattedMessage } from "@/app/types";
 import type { Message } from "@landbot/core/dist/types";
+import DOMPurify from "dompurify";
 
 const getMessageText = (message: Message): string | undefined => {
-  // @ts-expect-error: rich_text, text should be included in type
-  return message.rich_text ?? message.text ?? message.message;
+  return (
+    // @ts-expect-error: rich_text should be included in type
+    DOMPurify.sanitize(message.rich_text, {
+      USE_PROFILES: {
+        html: false,
+      },
+    }) ??
+    // @ts-expect-error: text should be included in type
+    message.text ??
+    message.message
+  );
 };
 
 export const formatMessage = (message: Message): FormattedMessage => {
