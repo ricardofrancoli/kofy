@@ -1,12 +1,18 @@
 "use client";
 
-// import { formatMessage } from "@/app/utils";
+import { DialogMessage } from "./components/DialogMessage";
+import { TextMessage } from "./components/TextMessage";
 import { useLandbotMessages } from "./hooks/useLandbotMessages";
 import { useStreamedMessages } from "./hooks/useStreamedMessages";
+import { ValidMessageType } from "./types";
 
 export default function Home() {
   const { error, isLoading, messages, sendMessage } = useLandbotMessages();
   const { streamedMessages } = useStreamedMessages(messages);
+
+  const onButtonClick = (payload: string) => {
+    sendMessage({ payload });
+  };
 
   if (error) {
     return <>Error: {error}</>;
@@ -18,41 +24,20 @@ export default function Home() {
 
   return (
     <>
-      {streamedMessages.map((formattedMessage) => {
-        console.log("formattedMessage in component", formattedMessage);
+      {streamedMessages.map((streamedMessage) => {
+        console.log("streamedMessage in component", streamedMessage);
 
-        // const formattedMessage = formatMessage(message);
-
-        if (!formattedMessage) {
-          return <></>;
-        }
-
-        if (formattedMessage.type === "text") {
+        if (streamedMessage.type === ValidMessageType.text) {
           return (
-            <div key={formattedMessage.key}>
-              {formattedMessage.text}
-              {formattedMessage.type}
+            <div key={streamedMessage.id}>
+              <TextMessage {...streamedMessage} />
             </div>
           );
         }
 
         return (
-          <div key={formattedMessage.key}>
-            {formattedMessage.text}
-            {formattedMessage.type}
-            {formattedMessage?.buttons?.map((btn) => {
-              console.log("btn", btn);
-              return (
-                <button
-                  key={Math.random()}
-                  type="button"
-                  onClick={() => sendMessage({ payload: "$0" })}
-                >
-                  {btn}
-                </button>
-              );
-            })}
-            <p>{formattedMessage?.payloads}</p>
+          <div key={streamedMessage.id}>
+            <DialogMessage {...streamedMessage} onButtonClick={onButtonClick} />
           </div>
         );
       })}

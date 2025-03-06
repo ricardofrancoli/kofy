@@ -1,4 +1,4 @@
-import type { DialogMessage, TextMessage } from "@/app/types";
+import type { FormattedMessage } from "@/app/types";
 import type { Message } from "@landbot/core/dist/types";
 
 const getMessageText = (message: Message): string | undefined => {
@@ -6,10 +6,10 @@ const getMessageText = (message: Message): string | undefined => {
   return message.rich_text ?? message.text ?? message.message;
 };
 
-export const formatMessage = (message: Message): DialogMessage | TextMessage => {
+export const formatMessage = (message: Message): FormattedMessage => {
   // TODO: handle error in case of no text?
   const commonFields = {
-    key: message.key,
+    id: message.key,
     text: getMessageText(message),
     timestamp: message.timestamp,
   };

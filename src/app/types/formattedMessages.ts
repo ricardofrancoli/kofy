@@ -2,7 +2,7 @@ import type { ValidMessageType } from "./constants";
 
 type CommonProps<T extends ValidMessageType> = {
   type: T;
-  key: string;
+  id: string;
   text: string | undefined;
   timestamp: number;
 };
