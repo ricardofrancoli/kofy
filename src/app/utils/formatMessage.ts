@@ -1,4 +1,4 @@
-import type { ButtonMessage, DialogMessage, TextMessage } from "@/app/utils/types";
+import type { DialogMessage, TextMessage } from "@/app/types";
 import type { Message } from "@landbot/core/dist/types";
 
 const getMessageText = (message: Message): string | undefined => {
@@ -6,7 +6,7 @@ const getMessageText = (message: Message): string | undefined => {
   return message.rich_text ?? message.text ?? message.message;
 };
 
-export const formatMessage = (message: Message): ButtonMessage | DialogMessage | TextMessage => {
+export const formatMessage = (message: Message): DialogMessage | TextMessage => {
   // TODO: handle error in case of no text?
   const commonFields = {
     key: message.key,
@@ -28,13 +28,6 @@ export const formatMessage = (message: Message): ButtonMessage | DialogMessage |
       buttons: message.buttons,
       // @ts-expect-error: payloads should be included in type
       payloads: message.payloads,
-      ...commonFields,
-    };
-  }
-
-  if (message.type === "button") {
-    return {
-      type: "button",
       ...commonFields,
     };
   }

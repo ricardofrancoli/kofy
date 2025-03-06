@@ -1,28 +1,68 @@
+import type LandbotCore from "@landbot/core";
 import type { Message, SendingMessage } from "@landbot/core/dist/types";
-import { useEffect, useState } from "react";
-import { useLandbotCore } from "./useLandbotCore";
+import ky from "ky";
+import { useEffect, useRef, useState } from "react";
+import { isValidMessageType } from "../utils";
+
+const CONFIG_URL = "https://landbot.online/v3/H-2814377-7W1AV8VP9CUPOV1X/index.json";
 
 type MessageKey = string;
 
 export const useLandbotMessages = () => {
-  const { coreRef } = useLandbotCore();
   const [messages, setMessages] = useState<Record<MessageKey, Message>>({});
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string>("");
+  const coreRef = useRef<LandbotCore | null>(null);
 
   useEffect(() => {
-    console.log("calling messages", coreRef.current);
-    if (!coreRef.current) {
-      return;
-    }
+    const initialise = async () => {
+      setIsLoading(true);
 
-    coreRef.current.pipelines.$readableSequence.subscribe((message) => {
-      console.log("new message!");
+      try {
+        const { Core: LandbotCore } = await import("@landbot/core");
 
-      setMessages((prevMessages) => ({
-        ...prevMessages,
-        [message.key]: message,
-      }));
-    });
-  }, [coreRef.current]);
+        const config = await ky.get(CONFIG_URL).json();
+
+        console.log("config", config);
+
+        // @ts-expect-error: TODO validate config value
+        coreRef.current = new LandbotCore(config);
+
+        console.log("coreRef", coreRef.current);
+
+        if (!coreRef.current) {
+          throw new Error("Failed to initialise Landbot");
+        }
+
+        await coreRef.current.init();
+
+        coreRef.current.pipelines.$readableSequence.subscribe((message) => {
+          if (!isValidMessageType(message)) {
+            return;
+          }
+
+          setMessages((prevMessages) => ({
+            ...prevMessages,
+            [message.key]: message,
+          }));
+        });
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Unknown error when initialising Landbot");
+        console.error("err", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    initialise();
+
+    return () => {
+      if (coreRef.current) {
+        coreRef.current.destroy();
+        coreRef.current = null;
+      }
+    };
+  }, []);
 
   const sendMessage = async (sendingMessage: Partial<SendingMessage>) => {
     if (!coreRef.current) {
@@ -38,6 +78,8 @@ export const useLandbotMessages = () => {
   };
 
   return {
+    error,
+    isLoading,
     messages,
     sendMessage,
   };
