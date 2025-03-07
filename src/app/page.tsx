@@ -44,16 +44,20 @@ export default function Home() {
         setIsChoicesVisible(true);
       }, 50);
 
+      return () => clearTimeout(visibilityTimer);
+    }
+  }, [shouldShowChoices, isChoicesVisible]);
+
+  useEffect(() => {
+    if (shouldShowChoices && isChoicesVisible) {
+      // Small delay to ensure the DOM is fully updated with the new content
       const scrollTimer = setTimeout(() => {
         scrollToBottom();
-      }, 150);
+      }, 100);
 
-      return () => {
-        clearTimeout(visibilityTimer);
-        clearTimeout(scrollTimer);
-      };
+      return () => clearTimeout(scrollTimer);
     }
-  }, [shouldShowChoices, isChoicesVisible, scrollToBottom]);
+  }, [isChoicesVisible, shouldShowChoices, scrollToBottom]);
 
   const onButtonClick = async (selectedPayload: string, payloads: string[], isWelcome: boolean) => {
     sendMessage({ payload: selectedPayload });
