@@ -1,6 +1,6 @@
 # Kofy
 
-Kofy is your new favourite bot roaster. Answer their questions and it will roast your choices. It will then match you with your Kofy profile, with a selection of coffee origins, ,methods and complements.
+Kofy is your new favourite bot roaster. Answer their questions and it will roast your choices. It will then match you with your Kofy profile, with a selection of coffee origins, methods and complements.
 
 Built with Next.js 15, React 19, and Tailwind CSS, using [@landbot/core](https://www.npmjs.com/package/@landbot/core) for the bot interactions.
 
