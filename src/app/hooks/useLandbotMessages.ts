@@ -1,6 +1,6 @@
 import type { MessagesRecord } from "@/app/types";
 import type LandbotCore from "@landbot/core";
-import type { SendingMessage } from "@landbot/core/dist/types";
+import type { ConfigProperties, SendingMessage } from "@landbot/core/dist/types";
 import ky from "ky";
 import { useEffect, useRef, useState } from "react";
 import { isValidMessageType } from "../utils";
@@ -21,14 +21,9 @@ export const useLandbotMessages = () => {
       try {
         const { Core: LandbotCore } = await import("@landbot/core");
 
-        const config = await ky.get(CONFIG_URL).json();
+        const config = await ky.get<ConfigProperties>(CONFIG_URL).json();
 
-        console.log("config", config);
-
-        // @ts-expect-error: TODO validate config value
         coreRef.current = new LandbotCore(config);
-
-        console.log("coreRef", coreRef.current);
 
         if (!coreRef.current) {
           throw new Error("Failed to initialise Landbot");
@@ -37,8 +32,6 @@ export const useLandbotMessages = () => {
         await coreRef.current.init();
 
         coreRef.current.pipelines.$readableSequence.subscribe((message) => {
-          // console.log("coreRef.current then", coreRef.current);
-          console.log("message", message);
           if (!isValidMessageType(message)) {
             return;
           }
@@ -70,8 +63,6 @@ export const useLandbotMessages = () => {
     if (!coreRef.current) {
       throw new Error("Landbot isn't defined");
     }
-
-    console.log("sending message", sendingMessage);
 
     await coreRef.current.sendMessage({
       payload: sendingMessage.payload,

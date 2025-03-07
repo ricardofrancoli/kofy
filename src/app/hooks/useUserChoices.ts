@@ -1,6 +1,4 @@
 import {
-  type CoffeeChoicesTuple,
-  //   type CoffeeChoicesTuple,
   Combination,
   type DialogMessage,
   type FinalCoffeeChoices,
@@ -57,17 +55,14 @@ export const useUserChoices = () => {
 
     if (totalCoffeeChoices === 0) {
       setOriginChoice(Origin[payloadSection]);
-      //   console.log("origin", coffeeChoices);
     }
 
     if (totalCoffeeChoices === 1) {
       setMethodChoice(Method[payloadSection]);
-      //   console.log("method", coffeeChoices);
     }
 
     if (totalCoffeeChoices === 2) {
       setCombinationChoice(Combination[payloadSection]);
-      //   console.log("combination", coffeeChoices);
     }
   };
 

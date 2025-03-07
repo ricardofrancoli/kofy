@@ -42,7 +42,6 @@ export const ScaleButtons = ({
               `}
             >
               {button}
-              {isSelected && <span className="ml-2 text-xs">✓</span>}
             </button>
           );
         })}

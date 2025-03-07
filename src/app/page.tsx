@@ -40,12 +40,20 @@ export default function Home() {
   useEffect(() => {
     if (shouldShowChoices && !isChoicesVisible) {
       // Small delay to ensure DOM is updated before animation starts
-      const timer = setTimeout(() => {
+      const visibilityTimer = setTimeout(() => {
         setIsChoicesVisible(true);
       }, 50);
-      return () => clearTimeout(timer);
+
+      const scrollTimer = setTimeout(() => {
+        scrollToBottom();
+      }, 150);
+
+      return () => {
+        clearTimeout(visibilityTimer);
+        clearTimeout(scrollTimer);
+      };
     }
-  }, [shouldShowChoices, isChoicesVisible]);
+  }, [shouldShowChoices, isChoicesVisible, scrollToBottom]);
 
   const onButtonClick = async (selectedPayload: string, payloads: string[], isWelcome: boolean) => {
     sendMessage({ payload: selectedPayload });
