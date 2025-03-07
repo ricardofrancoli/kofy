@@ -42,8 +42,6 @@ export const useUserChoices = () => {
     payloads: DialogMessage["payloads"],
   ) => {
     const payloadSection = findArrayThird(payloads, selectedPayload);
-    console.log("payloadSection", payloadSection);
-    console.log("totalCoffeeChoices", totalCoffeeChoices);
 
     if (payloadSection === -1) {
       throw new Error("Payload not found!");

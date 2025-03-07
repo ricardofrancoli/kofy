@@ -17,7 +17,6 @@ const getMessageText = (message: Message): string | undefined => {
 };
 
 export const formatMessage = (message: Message): FormattedMessage => {
-  // console.log("message", message);
   // TODO: handle error in case of no text?
   const commonFields = {
     id: message.key,
@@ -61,7 +60,7 @@ export const formatMessage = (message: Message): FormattedMessage => {
     };
   }
 
-  // TODO: better handle error. Perhaps only allow valid messages
+  // TODO: better handle error. Only allowing
   console.warn("message not included", message);
   throw new Error("Invalid button type");
 };
