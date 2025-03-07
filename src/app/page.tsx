@@ -1,15 +1,20 @@
 "use client";
 
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { CoffeeChoices } from "./components/CoffeeChoices";
 import { DialogMessage } from "./components/DialogMessage/DialogMessage";
 import { TextMessage } from "./components/TextMessage";
 import { useLandbotMessages } from "./hooks/useLandbotMessages";
 import { useStreamedMessages } from "./hooks/useStreamedMessages";
+import { useUserChoices } from "./hooks/useUserChoices";
 import { ValidMessageType } from "./types";
 
 export default function Home() {
   const { error, isLoading, messages, sendMessage } = useLandbotMessages();
   const { streamedMessages } = useStreamedMessages(messages);
+  const { finalCoffeeChoices, addChoice } = useUserChoices();
+  const [shouldShowChoices, setShouldShowChoices] = useState(false);
+  const [isChoicesVisible, setIsChoicesVisible] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
@@ -32,8 +37,27 @@ export default function Home() {
     scrollToBottom();
   }, [scrollToBottom, streamedMessages]);
 
-  const onButtonClick = (payload: string) => {
-    sendMessage({ payload });
+  useEffect(() => {
+    if (shouldShowChoices && !isChoicesVisible) {
+      // Small delay to ensure DOM is updated before animation starts
+      const timer = setTimeout(() => {
+        setIsChoicesVisible(true);
+      }, 50);
+      return () => clearTimeout(timer);
+    }
+  }, [shouldShowChoices, isChoicesVisible]);
+
+  const onButtonClick = async (selectedPayload: string, payloads: string[], isWelcome: boolean) => {
+    sendMessage({ payload: selectedPayload });
+
+    if (finalCoffeeChoices) {
+      setShouldShowChoices(true);
+      return;
+    }
+
+    if (!isWelcome) {
+      addChoice(selectedPayload, payloads);
+    }
   };
 
   if (error) {
@@ -88,10 +112,30 @@ export default function Home() {
 
               return (
                 <div key={streamedMessage.id}>
-                  <DialogMessage {...streamedMessage} onButtonClick={onButtonClick} />
+                  <DialogMessage
+                    {...streamedMessage}
+                    onButtonClick={(payload) =>
+                      onButtonClick(payload, streamedMessage.payloads, streamedMessage.isWelcome)
+                    }
+                  />
                 </div>
               );
             })}
+
+            {finalCoffeeChoices && isChoicesVisible && (
+              <div
+                className={`transition-all duration-500 ease-in-out mt-4 pt-4
+                  ${
+                    isChoicesVisible
+                      ? "opacity-100 max-h-96 transform translate-y-0"
+                      : "opacity-0 max-h-0 transform translate-y-10 overflow-hidden"
+                  }`}
+              >
+                <h3 className="text-center font-bold text-mocha mb-2">Your Coffee Selection</h3>
+                <CoffeeChoices coffeeChoices={finalCoffeeChoices} />
+              </div>
+            )}
+
             <div ref={messagesEndRef} />
           </div>
         </div>

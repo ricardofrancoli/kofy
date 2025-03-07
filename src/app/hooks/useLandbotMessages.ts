@@ -5,7 +5,8 @@ import ky from "ky";
 import { useEffect, useRef, useState } from "react";
 import { isValidMessageType } from "../utils";
 
-const CONFIG_URL = "https://landbot.online/v3/H-2814377-7W1AV8VP9CUPOV1X/index.json";
+// const CONFIG_URL = "https://landbot.online/v3/H-2814377-7W1AV8VP9CUPOV1X/index.json";
+const CONFIG_URL = "https://landbot.online/v3/H-2817215-F3HLNVI4EF4YM54P/index.json";
 
 export const useLandbotMessages = () => {
   const [messages, setMessages] = useState<MessagesRecord>({});
@@ -36,6 +37,8 @@ export const useLandbotMessages = () => {
         await coreRef.current.init();
 
         coreRef.current.pipelines.$readableSequence.subscribe((message) => {
+          // console.log("coreRef.current then", coreRef.current);
+          console.log("message", message);
           if (!isValidMessageType(message)) {
             return;
           }

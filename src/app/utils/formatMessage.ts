@@ -17,10 +17,12 @@ const getMessageText = (message: Message): string | undefined => {
 };
 
 export const formatMessage = (message: Message): FormattedMessage => {
-  console.log("message", message);
+  // console.log("message", message);
   // TODO: handle error in case of no text?
   const commonFields = {
     id: message.key,
+    // @ts-expect-error: extra.welcome should be included in type
+    isWelcome: !!message.extra?.welcome,
     text: getMessageText(message),
     timestamp: message.timestamp,
   };
